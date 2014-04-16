@@ -28,7 +28,12 @@ func (this *MainController) Get() {
 		fmt.Printf("\t%d: %v\n", i, d)
 	}
 
-	this.Data["Website"] = v / 1024 / 1024
-	this.Data["Email"] = dirs
+	this.Data["UsedSize"] = v / 1024 / 1024
+	files, err := u.ReadDir("/")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	this.Data["Files"] = files
 	this.TplNames = "index.html"
 }
