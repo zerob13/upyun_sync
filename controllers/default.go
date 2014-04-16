@@ -30,5 +30,5 @@ func (this *MainController) Get() {
 
 	this.Data["Website"] = v / 1024 / 1024
 	this.Data["Email"] = dirs
-	this.TplNames = "index.tpl"
+	this.TplNames = "index.html"
 }
