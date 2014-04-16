@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"fmt"
-	"upyun"
+	"upyun_sync/upyun"
 
 	"github.com/astaxie/beego"
 )
