@@ -19,6 +19,7 @@ func (this *MainController) Index() {
 	userinfo := this.GetSession("userinfo")
 	if userinfo == nil {
 		this.Ctx.Redirect(302, "/login")
+		return
 	}
 	fmt.Println(reflect.TypeOf(userinfo))
 	user := new(models.Space)
@@ -39,14 +40,22 @@ func (this *MainController) Index() {
 	for i, d := range dirs {
 		fmt.Printf("\t%d: %v\n", i, d)
 	}
-
+	currentPath := "/"
 	this.Data["UsedSize"] = v / 1024 / 1024
-	files, err := u.ReadDir("/")
+	files, err := u.ReadDir(currentPath)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	this.Data["Files"] = files
+	fmt.Println(len(files))
+	if files[0].Name != "" {
+		this.Data["Files"] = files
+	}
+	if currentPath[len(currentPath)-1] != os.PathSeparator {
+		currentPath += string(os.PathSeparator)
+	}
+	this.Data["User"] = user
+	this.Data["currentPath"] = currentPath
 	this.TplNames = "index.html"
 }
 
@@ -120,4 +129,23 @@ func (this *MainController) Upload() {
 	fmt.Printf("WriteFile: %v\n", u.WriteFile(target, tmp, true))
 
 	this.Ctx.Redirect(302, "/index")
+}
+
+func (this *MainController) Delete() {
+	userinfo := this.GetSession("userinfo")
+	if userinfo == nil {
+		this.Ctx.Redirect(302, "/login")
+	}
+	fileName := this.GetString("dFilename")
+	user := new(models.Space)
+	//Magic code:: reflect to get all field
+	user.Name = reflect.ValueOf(userinfo).Elem().Field(0).String()
+	user.UserName = reflect.ValueOf(userinfo).Elem().Field(1).String()
+	user.PassWord = reflect.ValueOf(userinfo).Elem().Field(2).String()
+	u := upyun.NewUpYun(user.Name, user.UserName, user.PassWord)
+	u.Debug = true
+	u.SetApiDomain(upyun.EdAuto)
+	fmt.Printf("RmDir: %v\n", u.RmDir(fileName))
+	this.Ctx.Redirect(302, "/index")
+
 }
