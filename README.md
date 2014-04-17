@@ -1,5 +1,5 @@
 # goDashboard-for-UPYUN
-
+##部署    
 ```
 cd $GOPATH/src
 go get github.com/astaxie/beego
@@ -9,3 +9,5 @@ cd upyun_sync
 bee run
 
 ```
+##Demo (并非基于最新代码)       
+[http://zerob13.in:6699](http://zerob13.in:6699)
