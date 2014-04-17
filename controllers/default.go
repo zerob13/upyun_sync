@@ -114,7 +114,7 @@ func (this *MainController) Upload() {
 		this.Ctx.Redirect(302, "/index")
 		return
 	}
-	// defer os.Remove(tofile)
+	defer os.Remove(tofile)
 	defer tmp.Close()
 	u.SetContentMD5(upyun.FileMd5(tofile))
 	fmt.Printf("WriteFile: %v\n", u.WriteFile(target, tmp, true))
