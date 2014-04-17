@@ -35,12 +35,16 @@ func (this *MainController) Index() {
 		fmt.Println(err)
 		return
 	}
-	dirs, err := u.ReadDir("/")
+	filepath := this.GetString("path")
+	if filepath == "" {
+		filepath = "/"
+	}
+	dirs, err := u.ReadDir("filepath")
 	fmt.Printf("ReadDir: %v\n", err)
 	for i, d := range dirs {
 		fmt.Printf("\t%d: %v\n", i, d)
 	}
-	currentPath := "/"
+	currentPath := filepath
 	this.Data["UsedSize"] = v / 1024 / 1024
 	files, err := u.ReadDir(currentPath)
 	if err != nil {

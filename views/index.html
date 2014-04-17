@@ -96,10 +96,10 @@
                         {{$cur:=.currentPath}}
                         {{range $j:= .Files}}
                         <tr>
-                            <td>{{$j.Name}}  <a href="/delete?dFilename={{$cur}}{{$j.Name}}" class="btn-sm btn-danger pull-right" >删除</a>
+                            <td><span class="{{$j.Type|fileConv}}"></span> {{genLink $j.Type $j.Name $cur}}<a href="/delete?dFilename={{$cur}}{{$j.Name}}" class="btn-sm btn-danger pull-right" >删除</a>
                             </td>
                             <td>{{$j.Size}} KB</td>
-                            <td>{{$j.Time}}</td>
+                            <td>{{$j.Time|converTime}}</td>
                         </tr>
                         {{end}}
                         </tbody>
