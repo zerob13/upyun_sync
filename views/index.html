@@ -16,7 +16,7 @@
            <script type="text/javascript" src="js/respond.min.js"></script>
  <![endif]-->
 <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-        <link rel="stylesheet" media="screen" href="/static/css/bootstrap-theme.min.css">
+<link rel="stylesheet" media="screen" href="/static/css/bootstrap-theme.min.css">
 <link rel="stylesheet" media="screen" href="/static/css/DT_bootstrap.css">
 <script src="/static/js/jquery-2.1.0.min.js"></script>
 <title>管理后台</title>
@@ -81,6 +81,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="text-muted bootstrap-admin-box-title">文件浏览</div>
+                    <a href="#myUploadModal" data-toggle="modal" class="btn-sm btn-primary pull-right">上传文件</a>
                 </div>
                 <div class="bootstrap-admin-panel-content">
                     <table class="table">
@@ -106,7 +107,40 @@
         </div>
     </div>
 </div>
+<div id="myUploadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal"  method="post" action="upload" enctype="multipart/form-data">
+                <fieldset>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 id="myModalLabel" class="modal-title">上传文件</h4>
+                    </div>
+                    <div class="modal-body">
+                        <legend>选择需要上传的文件</legend>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" for="focusedInput">目标地址</label>
+                            <div class="col-lg-5">
+                                <input class="form-control" id="focusedInput" type="text" value="/" name="targetPath">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" for="fileInput">选择文件</label>
+                            <div class="col-lg-5">
+                                <input type="file" id="fileInput" name="filePath">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary" >确认上传</button>
+                    </div>
 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
 
 <script src="/static/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/static/js/twitter-bootstrap-hover-dropdown.min.js"></script>

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"os"
 	"reflect"
 	"upyun_sync/models"
 	"upyun_sync/upyun"
@@ -26,7 +27,7 @@ func (this *MainController) Index() {
 	user.UserName = reflect.ValueOf(userinfo).Elem().Field(1).String()
 	user.PassWord = reflect.ValueOf(userinfo).Elem().Field(2).String()
 	u := upyun.NewUpYun(user.Name, user.UserName, user.PassWord)
-	u.Debug = true
+	u.Debug = false
 	u.SetApiDomain(upyun.EdAuto)
 	v, err := u.GetBucketUsage()
 	if err != nil {
@@ -51,7 +52,7 @@ func (this *MainController) Index() {
 
 func (this *MainController) Login() {
 	userinfo := this.GetSession("userinfo")
-	fmt.Println(userinfo)
+	// fmt.Println(userinfo)
 	if userinfo != nil {
 		this.Ctx.Redirect(302, "/index")
 	}
@@ -74,4 +75,49 @@ func (this *MainController) Login() {
 func (this *MainController) Logout() {
 	this.DelSession("userinfo")
 	this.Ctx.Redirect(302, "/login")
+}
+
+func (this *MainController) Upload() {
+	userinfo := this.GetSession("userinfo")
+	if userinfo == nil {
+		this.Ctx.Redirect(302, "/login")
+	}
+	// filename := this.GetString("filePath")
+	file, fileheader, _ := this.GetFile("filePath")
+	filename := fileheader.Filename
+	file.Close()
+	targetpath := this.GetString("targetPath")
+	if targetpath[len(targetpath)-1] != os.PathSeparator {
+		targetpath += string(os.PathSeparator)
+	}
+	target := targetpath + filename
+	fmt.Println(target)
+	user := new(models.Space)
+	//Magic code:: reflect to get all field
+	user.Name = reflect.ValueOf(userinfo).Elem().Field(0).String()
+	user.UserName = reflect.ValueOf(userinfo).Elem().Field(1).String()
+	user.PassWord = reflect.ValueOf(userinfo).Elem().Field(2).String()
+	u := upyun.NewUpYun(user.Name, user.UserName, user.PassWord)
+	u.Debug = true
+	u.SetApiDomain(upyun.EdAuto)
+	tofile := "./tmp/" + user.UserName + "_" + filename
+	err := this.SaveToFile("filePath", tofile)
+	if err != nil {
+		fmt.Println(err)
+		this.Ctx.Redirect(302, "/index")
+		return
+	}
+
+	tmp, err := os.Open(tofile)
+	if err != nil {
+		fmt.Println(err)
+		this.Ctx.Redirect(302, "/index")
+		return
+	}
+	// defer os.Remove(tofile)
+	defer tmp.Close()
+	u.SetContentMD5(upyun.FileMd5(tofile))
+	fmt.Printf("WriteFile: %v\n", u.WriteFile(target, tmp, true))
+
+	this.Ctx.Redirect(302, "/index")
 }
