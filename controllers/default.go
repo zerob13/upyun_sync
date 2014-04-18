@@ -49,6 +49,8 @@ func (this *MainController) Index() {
 	files, err := u.ReadDir(currentPath)
 	if err != nil {
 		fmt.Println(err)
+
+		this.Ctx.Redirect(302, "/index")
 		return
 	}
 	fmt.Println(len(files))
@@ -97,7 +99,7 @@ func (this *MainController) Upload() {
 	}
 	// filename := this.GetString("filePath")
 	file, fileheader, _ := this.GetFile("filePath")
-	filename := fileheader.Filename
+	filename := models.Urlencode(fileheader.Filename)
 	file.Close()
 	targetpath := this.GetString("targetPath")
 	if targetpath[len(targetpath)-1] != os.PathSeparator {
@@ -111,7 +113,7 @@ func (this *MainController) Upload() {
 	user.UserName = reflect.ValueOf(userinfo).Elem().Field(1).String()
 	user.PassWord = reflect.ValueOf(userinfo).Elem().Field(2).String()
 	u := upyun.NewUpYun(user.Name, user.UserName, user.PassWord)
-	u.Debug = true
+	u.Debug = false
 	u.SetApiDomain(upyun.EdAuto)
 	tofile := "./tmp/" + user.UserName + "_" + filename
 	err := this.SaveToFile("filePath", tofile)

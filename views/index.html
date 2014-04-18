@@ -58,9 +58,6 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                    <a href="#">Reminders <i class="glyphicon glyphicon-bell"></i></a>
-                    </li>
-                    <li>
                     <a href="#">Settings <i class="glyphicon glyphicon-cog"></i></a>
                     </li>
                     <li class="dropdown">
@@ -81,6 +78,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="text-muted bootstrap-admin-box-title">{{.User.Name}}空间文件浏览({{.currentPath}})</div>
+                    {{genBackBtn .currentPath}} 
                     <a href="#myUploadModal" data-toggle="modal" class="btn-sm btn-primary pull-right">上传文件</a>
                 </div>
                 <div class="bootstrap-admin-panel-content">
@@ -96,7 +94,7 @@
                         {{$cur:=.currentPath}}
                         {{range $j:= .Files}}
                         <tr>
-                            <td><span class="{{$j.Type|fileConv}}"></span> {{genLink $j.Type $j.Name $cur}}<a href="/delete?dFilename={{$cur}}{{$j.Name}}" class="btn-sm btn-danger pull-right" >删除</a>
+                            <td><span class="{{$j.Type|fileConv}}"></span> {{genLink $j.Type $j.Name $cur}}
                             </td>
                             <td>{{$j.Size}} KB</td>
                             <td>{{$j.Time|converTime}}</td>
