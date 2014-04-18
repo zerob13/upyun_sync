@@ -178,3 +178,12 @@ div.DTFC_LeftBodyWrapper tbody tr:first-child td {
 div.DTFC_LeftFootWrapper table {
 	border-top: none;
 }
+
+.span3{
+ max-height: 600px !important;
+ overflow: scroll;
+}
+.arch-warp{
+ max-height: 1200px; 
+     overflow: auto;
+ }

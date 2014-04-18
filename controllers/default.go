@@ -33,6 +33,8 @@ func (this *MainController) Index() {
 	v, err := u.GetBucketUsage()
 	if err != nil {
 		fmt.Println(err)
+		this.DelSession("userinfo")
+		this.Ctx.Redirect(302, "/login")
 		return
 	}
 	filepath := this.GetString("path")
@@ -49,7 +51,6 @@ func (this *MainController) Index() {
 	files, err := u.ReadDir(currentPath)
 	if err != nil {
 		fmt.Println(err)
-
 		this.Ctx.Redirect(302, "/index")
 		return
 	}

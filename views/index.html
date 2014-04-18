@@ -81,8 +81,8 @@
                     {{genBackBtn .currentPath}} 
                     <a href="#myUploadModal" data-toggle="modal" class="btn-sm btn-primary pull-right">上传文件</a>
                 </div>
-                <div class="bootstrap-admin-panel-content">
-                    <table class="table">
+                <div class="bootstrap-admin-panel-content span3 arch-warp">
+                    <table class="table table-responsive table-hover">
                         <thead>
                             <tr>
                                 <th>FileName</th>
@@ -93,7 +93,7 @@
                         <tbody>
                         {{$cur:=.currentPath}}
                         {{range $j:= .Files}}
-                        <tr>
+                        <tr class="warning">
                             <td><span class="{{$j.Type|fileConv}}"></span> {{genLink $j.Type $j.Name $cur}}
                             </td>
                             <td>{{$j.Size}} KB</td>
